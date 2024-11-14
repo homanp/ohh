@@ -8,12 +8,10 @@ A TypeScript library for creating and managing poker hand histories following th
 
 </div>
 
-
-
 ## Installation
 
 ```bash
-npm install open-hand-history
+npm install ohh
 ```
 
 ## Quick Start
@@ -25,6 +23,7 @@ import { OpenHandHistory } from 'open-hand-history';
 const ohh = new OpenHandHistory({
   siteName: 'MyPokerSite',
   tableSize: 6
+  // other properties...
 });
 
 // Add a player
@@ -61,23 +60,23 @@ ohh.saveToFile('hand_history.json');
 #### Constructor Options
 ```typescript
 {
-  specVersion?: string;        // Default: '1.4.6'
-  internalVersion?: string;    // Default: '1.4.6'
-  networkName?: string;        // Default: 'CustomGame'
-  siteName?: string;          // Default: 'HomeGame'
-  gameType?: string;          // Default: 'Holdem'
-  tableName?: string;         // Default: 'Sample Table'
-  tableSize?: number;         // Default: 3
-  gameNumber?: string;        // Default: '1'
-  startDateUTC?: string;      // Default: current date
-  currency?: string;          // Default: 'Chips'
-  anteAmount?: number;        // Default: 0
-  smallBlindAmount?: number;  // Default: 1
-  bigBlindAmount?: number;    // Default: 2
-  betCap?: number;           // Default: 0
-  betType?: string;          // Default: 'NL'
-  dealerSeat?: number;       // Default: 1
-  heroPlayerId?: number;     // Default: 0
+  specVersion?: string;         // Default: '1.4.6'
+  internalVersion?: string;     // Default: '1.4.6'
+  networkName?: string;         // Default: 'CustomGame'
+  siteName?: string;            // Default: 'HomeGame'
+  gameType?: string;            // Default: 'Holdem'
+  tableName?: string;           // Default: 'Sample Table'
+  tableSize?: number;           // Default: 3
+  gameNumber?: string;          // Default: '1'
+  startDateUTC?: string;        // Default: current date
+  currency?: string;            // Default: 'Chips'
+  anteAmount?: number;          // Default: 0
+  smallBlindAmount?: number;    // Default: 1
+  bigBlindAmount?: number;      // Default: 2
+  betCap?: number;              // Default: 0
+  betType?: string;             // Default: 'NL'
+  dealerSeat?: number;          // Default: 1
+  heroPlayerId?: number;        // Default: 0
 }
 ```
 
