@@ -1,6 +1,6 @@
 <div align="center">
 
-![the-letters--ohh--as-a-sticker](https://github.com/user-attachments/assets/c9305341-9c90-42f1-83ff-d016904e3da2)
+<img src="https://github.com/user-attachments/assets/c9305341-9c90-42f1-83ff-d016904e3da2" alt="OHH Logo" height="80" />
 
 # 🃏 OHH
 
