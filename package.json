@@ -4,6 +4,7 @@
   "description": "A package for creating and managing poker hand histories",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": "https://github.com/homanp/ohh.git",
   "scripts": {
     "build": "tsc",
     "test": "jest",
@@ -16,6 +17,9 @@
   ],
   "author": "Ismail Pelaseyed",
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "devDependencies": {
     "@types/jest": "^29.5.0",
     "@types/node": "^18.15.11",
