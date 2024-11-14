@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="https://www.recraft.ai/community?imageId=bb9efb6f-ae48-4680-9a6a-0c0c996bc166" alt="OHH Logo" height="80" />
+
 # 🃏 OHH
 
 A TypeScript library for creating and managing poker hand histories following the [Open Hand History](https://hh-specs.handhistory.org/) standard.
