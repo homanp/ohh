@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="https://github.com/user-attachments/assets/c9305341-9c90-42f1-83ff-d016904e3da2" alt="OHH Logo" height="80" />
+<img src="https://github.com/user-attachments/assets/c9305341-9c90-42f1-83ff-d016904e3da2" alt="OHH Logo" height="100" />
 
-# 🃏 OHH
+# Open Hand History
 
 A TypeScript library for creating and managing poker hand histories following the [Open Hand History](https://hh-specs.handhistory.org/) standard.
 
