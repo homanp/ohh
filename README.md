@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://www.recraft.ai/community?imageId=bb9efb6f-ae48-4680-9a6a-0c0c996bc166" alt="OHH Logo" height="80" />
+![the-letters--ohh--as-a-sticker](https://github.com/user-attachments/assets/c9305341-9c90-42f1-83ff-d016904e3da2)
 
 # 🃏 OHH
 
