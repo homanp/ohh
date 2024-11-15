@@ -1,6 +1,6 @@
 {
   "name": "open-hand-tracker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A package for creating and managing poker hand histories",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

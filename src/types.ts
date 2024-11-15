@@ -1,17 +1,25 @@
 export interface Player {
   name: string;
   id: number;
-  startingStack: number;
+  starting_stack: number;
   seat: number;
   cards?: string[];
 }
 
 export interface Action {
-  actionNumber: number;
-  playerId: number;
-  action: string;
+  action_number: number;
+  player_id: number;
+  action:
+    | "Dealt Card"
+    | "Post SB"
+    | "Post BB"
+    | "Fold"
+    | "Check"
+    | "Bet"
+    | "Raise"
+    | "Call";
   amount?: number;
-  isAllIn?: boolean;
+  is_allin?: boolean;
 }
 
 export interface Round {
@@ -25,7 +33,7 @@ export interface Pot {
   rake?: number;
   number: number;
   amount: number;
-  playerWins: { playerId: number; winAmount: number }[];
+  player_wins: { player_id: number; win_amount: number }[];
 }
 
 export interface OHHData {
