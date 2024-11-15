@@ -76,6 +76,87 @@ export class OpenHandHistory {
     const stringRepresentation = JSON.stringify(this.toJSON(), null, 2);
     writeFileSync(filename, stringRepresentation);
   }
+
+  calculateWinningAmount(playerId: number): number {
+    let totalWinnings = 0;
+    let playerPosition = this.getPlayerPosition(playerId);
+
+    for (const round of this.ohh.rounds) {
+      let roundWinnings = 0;
+      for (const action of round.actions) {
+        if (action.player_id === playerId) {
+          if (
+            action.action === "Bet" ||
+            action.action === "Raise" ||
+            action.action === "Call"
+          ) {
+            roundWinnings -= action.amount || 0;
+          }
+        } else {
+          if (action.action === "Fold") {
+            roundWinnings += this.calculatePotContribution(
+              action.player_id,
+              round
+            );
+          }
+        }
+      }
+      totalWinnings += roundWinnings;
+    }
+
+    // Add winnings from pots
+    totalWinnings += this.ohh.pots.reduce((total, pot) => {
+      const playerWin = pot.player_wins.find(
+        (win) => win.player_id === playerId
+      );
+      return total + (playerWin ? playerWin.win_amount : 0);
+    }, 0);
+
+    // Adjust for blinds
+    if (playerPosition === "SB") {
+      totalWinnings -= this.ohh.small_blind_amount;
+    } else if (playerPosition === "BB") {
+      totalWinnings -= this.ohh.big_blind_amount;
+    }
+
+    return totalWinnings;
+  }
+
+  settleWinnings(playerId: number): boolean {
+    return this.calculateWinningAmount(playerId) > 0;
+  }
+
+  private getPlayerPosition(
+    playerId: number
+  ): "Button" | "SB" | "BB" | "Other" {
+    const playerIndex = this.ohh.players.findIndex(
+      (player) => player.id === playerId
+    );
+    const dealerIndex = this.ohh.players.findIndex(
+      (player) => player.seat === this.ohh.dealer_seat
+    );
+
+    if (playerIndex === dealerIndex) return "Button";
+    if (playerIndex === (dealerIndex + 1) % this.ohh.players.length)
+      return "SB";
+    if (playerIndex === (dealerIndex + 2) % this.ohh.players.length)
+      return "BB";
+    return "Other";
+  }
+
+  private calculatePotContribution(playerId: number, round: Round): number {
+    return round.actions.reduce((total, action) => {
+      if (
+        action.player_id === playerId &&
+        (action.action === "Bet" ||
+          action.action === "Raise" ||
+          action.action === "Call")
+      ) {
+        return total + (action.amount || 0);
+      }
+      return total;
+    }, 0);
+  }
 }
 
 export * from "./types";
