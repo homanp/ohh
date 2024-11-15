@@ -102,7 +102,7 @@ Add a new round to the hand history.
 interface Round {
   id: number;
   cards?: string[];
-  street: string;
+  street: "Preflop" | "Flop" | "Turn" | "River" | "Showdown"
   actions: Action[];
 }
 ```
