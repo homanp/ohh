@@ -17,7 +17,7 @@ export interface Action {
 export interface Round {
   id: number;
   cards?: string[];
-  street: string;
+  street: "Preflop" | "Flop" | "Turn" | "River" | "Showdown";
   actions: Action[];
 }
 
