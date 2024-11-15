@@ -68,12 +68,13 @@ export class OpenHandHistory {
     this.ohh.pots.push(pot);
   }
 
-  toJSON(): string {
-    return JSON.stringify(this.ohh, null, 2);
+  toJSON(): OHHData {
+    return this.ohh;
   }
 
   saveToFile(filename: string): void {
-    writeFileSync(filename, this.toJSON());
+    const stringRepresentation = JSON.stringify(this.toJSON(), null, 2);
+    writeFileSync(filename, stringRepresentation);
   }
 }
 
