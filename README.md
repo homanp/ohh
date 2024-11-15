@@ -13,13 +13,13 @@ A TypeScript library for creating and managing poker hand histories following th
 ## Installation
 
 ```bash
-npm install @homanp/open-hand-tracker
+npm install open-hand-tracker
 ```
 
 ## Quick Start
 
 ```typescript
-import { OpenHandHistory } from '@homanp/open-hand-tracker';
+import { OpenHandHistory } from 'open-hand-tracker';
 
 // Initialize hand history
 const ohh = new OpenHandHistory({
