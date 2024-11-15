@@ -51,6 +51,16 @@ ohh.addActionToRound(1, {
   amount: 100
 });
 
+// Add pot 
+ohh.addPot({
+  number: 1,
+  amount: 50,
+  player_wins: [{ player_id: 1, win_amount: 50 }],
+});
+
+// Calcuatle winnings
+ohh.calculateWinningAmount(1); // Pass the player ID 
+
 // Save to file
 ohh.saveToFile('hand_history.json');
 ```
@@ -129,6 +139,9 @@ interface Pot {
   playerWins: { playerId: number; winAmount: number }[];
 }
 ```
+
+##### `calculateWinningAmount(player_id: string): number`
+Calculates the winners winnings
 
 ##### `toJSON(): string`
 Convert the hand history to JSON string.
