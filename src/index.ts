@@ -66,15 +66,6 @@ export class OpenHandHistory {
 
   addPot(pot: Pot): void {
     this.ohh.pots.push(pot);
-
-    const lastPotIndex = this.ohh.pots.length - 1;
-    this.ohh.pots[lastPotIndex] = {
-      ...this.ohh.pots[lastPotIndex],
-      player_wins: this.ohh.pots[lastPotIndex].player_wins.map((win) => ({
-        ...win,
-        win_amount: this.calculateWinningAmount(win.player_id),
-      })),
-    };
   }
 
   toJSON(): OHHData {
@@ -86,81 +77,27 @@ export class OpenHandHistory {
     writeFileSync(filename, stringRepresentation);
   }
 
-  calculateWinningAmount(playerId: number): number {
-    let totalWinnings = 0;
-    let playerPosition = this.getPlayerPosition(playerId);
+  calculateWinningAmount(playerId: number, potAmount: number): number {
+    let totalContribution = 0;
 
+    // Calculate total contribution
     for (const round of this.ohh.rounds) {
-      let roundWinnings = 0;
       for (const action of round.actions) {
-        if (action.player_id === playerId) {
-          if (
-            action.action === "Bet" ||
+        if (
+          action.player_id === playerId &&
+          (action.action === "Bet" ||
             action.action === "Raise" ||
-            action.action === "Call"
-          ) {
-            roundWinnings -= action.amount || 0;
-          }
-        } else {
-          if (action.action === "Fold") {
-            roundWinnings += this.calculatePotContribution(
-              action.player_id,
-              round
-            );
-          }
+            action.action === "Call" ||
+            action.action === "Post SB" ||
+            action.action === "Post BB")
+        ) {
+          totalContribution += action.amount || 0;
         }
       }
-      totalWinnings += roundWinnings;
     }
 
-    // Add winnings from pots
-    totalWinnings += this.ohh.pots.reduce((total, pot) => {
-      const playerWin = pot.player_wins.find(
-        (win) => win.player_id === playerId
-      );
-      return total + (playerWin ? playerWin.win_amount : 0);
-    }, 0);
-
-    // Adjust for blinds
-    if (playerPosition === "SB") {
-      totalWinnings -= this.ohh.small_blind_amount;
-    } else if (playerPosition === "BB") {
-      totalWinnings -= this.ohh.big_blind_amount;
-    }
-
-    return totalWinnings;
-  }
-
-  private getPlayerPosition(
-    playerId: number
-  ): "Button" | "SB" | "BB" | "Other" {
-    const playerIndex = this.ohh.players.findIndex(
-      (player) => player.id === playerId
-    );
-    const dealerIndex = this.ohh.players.findIndex(
-      (player) => player.seat === this.ohh.dealer_seat
-    );
-
-    if (playerIndex === dealerIndex) return "Button";
-    if (playerIndex === (dealerIndex + 1) % this.ohh.players.length)
-      return "SB";
-    if (playerIndex === (dealerIndex + 2) % this.ohh.players.length)
-      return "BB";
-    return "Other";
-  }
-
-  private calculatePotContribution(playerId: number, round: Round): number {
-    return round.actions.reduce((total, action) => {
-      if (
-        action.player_id === playerId &&
-        (action.action === "Bet" ||
-          action.action === "Raise" ||
-          action.action === "Call")
-      ) {
-        return total + (action.amount || 0);
-      }
-      return total;
-    }, 0);
+    // Return the difference between pot amount and contribution
+    return potAmount - totalContribution;
   }
 }
 

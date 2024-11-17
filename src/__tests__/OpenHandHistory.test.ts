@@ -105,6 +105,7 @@ describe("OpenHandHistory", () => {
     ohh.addPot(pot);
     const json = ohh.toJSON();
     expect(json.pots).toHaveLength(1);
+    expect(json.pots[0]).toEqual(pot);
   });
 
   test("handles complex hand history correctly", () => {
@@ -134,8 +135,8 @@ describe("OpenHandHistory", () => {
     // Add pot
     ohh.addPot({
       number: 1,
-      amount: 200,
-      player_wins: [{ player_id: 1, win_amount: 200 }],
+      amount: 50,
+      player_wins: [{ player_id: 1, win_amount: 0 }],
     });
 
     const json = ohh.toJSON();
@@ -189,11 +190,13 @@ describe("OpenHandHistory", () => {
         player_id: 3,
         action: "Fold" as const,
       });
+      const win_amount = ohh.calculateWinningAmount(1, 50);
       ohh.addPot({
         number: 1,
         amount: 50,
-        player_wins: [{ player_id: 1, win_amount: 50 }],
+        player_wins: [{ player_id: 1, win_amount }],
       });
+
       const json = ohh.toJSON();
       expect(json.pots[0].player_wins[0].win_amount).toBe(30); // 50 (pot) - 20 (raise)
     });
