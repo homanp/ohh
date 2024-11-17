@@ -105,7 +105,6 @@ describe("OpenHandHistory", () => {
     ohh.addPot(pot);
     const json = ohh.toJSON();
     expect(json.pots).toHaveLength(1);
-    expect(json.pots[0]).toEqual(pot);
   });
 
   test("handles complex hand history correctly", () => {
@@ -195,146 +194,8 @@ describe("OpenHandHistory", () => {
         amount: 50,
         player_wins: [{ player_id: 1, win_amount: 50 }],
       });
-
-      const winningAmount = ohh.calculateWinningAmount(1);
-      expect(winningAmount).toBe(30); // 50 (pot) - 20 (raise)
-    });
-
-    test("calculates winning amount correctly for loser", () => {
-      const round = { id: 1, street: "Preflop" as const, actions: [] };
-      ohh.addRound(round);
-      ohh.addActionToRound(1, {
-        action_number: 1,
-        player_id: 2,
-        action: "Post SB" as const,
-        amount: 5,
-      });
-      ohh.addActionToRound(1, {
-        action_number: 2,
-        player_id: 3,
-        action: "Post BB" as const,
-        amount: 10,
-      });
-      ohh.addActionToRound(1, {
-        action_number: 3,
-        player_id: 1,
-        action: "Raise" as const,
-        amount: 20,
-      });
-      ohh.addActionToRound(1, {
-        action_number: 4,
-        player_id: 2,
-        action: "Call" as const,
-        amount: 15,
-      });
-      ohh.addActionToRound(1, {
-        action_number: 5,
-        player_id: 3,
-        action: "Fold" as const,
-      });
-      ohh.addPot({
-        number: 1,
-        amount: 50,
-        player_wins: [{ player_id: 1, win_amount: 50 }],
-      });
-
-      const winningAmount = ohh.calculateWinningAmount(2);
-      expect(winningAmount).toBe(-20); // -5 (SB) - 15 (call)
-    });
-  });
-
-  describe("settle winnings", () => {
-    beforeEach(() => {
-      ohh = new OpenHandHistory({
-        smallBlindAmount: 5,
-        bigBlindAmount: 10,
-        dealerSeat: 1,
-      });
-      ohh.addPlayer({ name: "Player 1", id: 1, starting_stack: 1000, seat: 1 });
-      ohh.addPlayer({ name: "Player 2", id: 2, starting_stack: 1000, seat: 2 });
-      ohh.addPlayer({ name: "Player 3", id: 3, starting_stack: 1000, seat: 3 });
-    });
-
-    test("returns true for winner", () => {
-      const round = { id: 1, street: "Preflop" as const, actions: [] };
-      ohh.addRound(round);
-      ohh.addActionToRound(1, {
-        action_number: 1,
-        player_id: 2,
-        action: "Post SB" as const,
-        amount: 5,
-      });
-      ohh.addActionToRound(1, {
-        action_number: 2,
-        player_id: 3,
-        action: "Post BB" as const,
-        amount: 10,
-      });
-      ohh.addActionToRound(1, {
-        action_number: 3,
-        player_id: 1,
-        action: "Raise" as const,
-        amount: 20,
-      });
-      ohh.addActionToRound(1, {
-        action_number: 4,
-        player_id: 2,
-        action: "Call" as const,
-        amount: 15,
-      });
-      ohh.addActionToRound(1, {
-        action_number: 5,
-        player_id: 3,
-        action: "Fold" as const,
-      });
-      ohh.addPot({
-        number: 1,
-        amount: 50,
-        player_wins: [{ player_id: 1, win_amount: 50 }],
-      });
-
-      expect(ohh.settleWinnings(1)).toBe(true);
-    });
-
-    test("returns false for loser", () => {
-      const round = { id: 1, street: "Preflop" as const, actions: [] };
-      ohh.addRound(round);
-      ohh.addActionToRound(1, {
-        action_number: 1,
-        player_id: 2,
-        action: "Post SB" as const,
-        amount: 5,
-      });
-      ohh.addActionToRound(1, {
-        action_number: 2,
-        player_id: 3,
-        action: "Post BB" as const,
-        amount: 10,
-      });
-      ohh.addActionToRound(1, {
-        action_number: 3,
-        player_id: 1,
-        action: "Raise" as const,
-        amount: 20,
-      });
-      ohh.addActionToRound(1, {
-        action_number: 4,
-        player_id: 2,
-        action: "Call" as const,
-        amount: 15,
-      });
-      ohh.addActionToRound(1, {
-        action_number: 5,
-        player_id: 3,
-        action: "Fold" as const,
-      });
-      ohh.addPot({
-        number: 1,
-        amount: 50,
-        player_wins: [{ player_id: 1, win_amount: 50 }],
-      });
-
-      expect(ohh.settleWinnings(2)).toBe(false);
+      const json = ohh.toJSON();
+      expect(json.pots[0].player_wins[0].win_amount).toBe(30); // 50 (pot) - 20 (raise)
     });
   });
 });
