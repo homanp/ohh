@@ -65,7 +65,14 @@ export class OpenHandHistory {
   }
 
   addPot(pot: Pot): void {
-    this.ohh.pots.push(pot);
+    const adjustedPot: Pot = {
+      ...pot,
+      player_wins: pot.player_wins.map((win) => ({
+        ...win,
+        win_amount: this.calculateWinningAmount(win.player_id),
+      })),
+    };
+    this.ohh.pots.push(adjustedPot);
   }
 
   toJSON(): OHHData {
