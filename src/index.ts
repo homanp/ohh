@@ -66,6 +66,15 @@ export class OpenHandHistory {
 
   addPot(pot: Pot): void {
     this.ohh.pots.push(pot);
+
+    const lastPotIndex = this.ohh.pots.length - 1;
+    this.ohh.pots[lastPotIndex] = {
+      ...this.ohh.pots[lastPotIndex],
+      player_wins: this.ohh.pots[lastPotIndex].player_wins.map((win) => ({
+        ...win,
+        win_amount: this.calculateWinningAmount(win.player_id),
+      })),
+    };
   }
 
   toJSON(): OHHData {
@@ -120,10 +129,6 @@ export class OpenHandHistory {
     }
 
     return totalWinnings;
-  }
-
-  settleWinnings(playerId: number): boolean {
-    return this.calculateWinningAmount(playerId) > 0;
   }
 
   private getPlayerPosition(
