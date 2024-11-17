@@ -51,15 +51,15 @@ ohh.addActionToRound(1, {
   amount: 100
 });
 
+// Calcuatle winnings
+win_amount = ohh.calculateWinningAmount(1, 50); // Pass the player ID 
+
 // Add pot 
 ohh.addPot({
   number: 1,
   amount: 50,
-  player_wins: [{ player_id: 1, win_amount: 50 }],
+  player_wins: [{ player_id: 1, win_amount: win_amount }],
 });
-
-// Calcuatle winnings
-ohh.calculateWinningAmount(1); // Pass the player ID 
 
 // Save to file
 ohh.saveToFile('hand_history.json');
@@ -100,7 +100,7 @@ Add a player to the hand history.
 interface Player {
   name: string;
   id: number;
-  startingStack: number;
+  starting_stack: number;
   seat: number;
   cards?: string[];
 }
@@ -121,11 +121,11 @@ interface Round {
 Add an action to a specific round.
 ```typescript
 interface Action {
-  actionNumber: number;
-  playerId: number;
+  action_number: number;
+  player_idd: number;
   action: string;
   amount?: number;
-  isAllIn?: boolean;
+  is_allin?: boolean;
 }
 ```
 
@@ -136,11 +136,11 @@ interface Pot {
   rake?: number;
   number: number;
   amount: number;
-  playerWins: { playerId: number; winAmount: number }[];
+  player_wins: { player_id: number; win_amount: number }[];
 }
 ```
 
-##### `calculateWinningAmount(player_id: string): number`
+##### `calculateWinningAmount(player_id: number, totalPot: number): number`
 Calculates the winners winnings
 
 ##### `toJSON(): string`
