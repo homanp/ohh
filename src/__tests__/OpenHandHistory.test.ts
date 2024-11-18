@@ -10,13 +10,13 @@ describe("OpenHandHistory", () => {
 
   test("creates instance with default values", () => {
     const json = ohh.toJSON();
-    expect(json.spec_version).toBe("1.4.6");
-    expect(json.game_type).toBe("Holdem");
-    expect(json.table_size).toBe(3);
-    expect(json.currency).toBe("Chips");
-    expect(json.players).toEqual([]);
-    expect(json.rounds).toEqual([]);
-    expect(json.pots).toEqual([]);
+    expect(json.ohh.spec_version).toBe("1.4.6");
+    expect(json.ohh.game_type).toBe("Holdem");
+    expect(json.ohh.table_size).toBe(3);
+    expect(json.ohh.currency).toBe("Chips");
+    expect(json.ohh.players).toEqual([]);
+    expect(json.ohh.rounds).toEqual([]);
+    expect(json.ohh.pots).toEqual([]);
   });
 
   test("creates instance with custom values", () => {
@@ -28,10 +28,10 @@ describe("OpenHandHistory", () => {
     });
 
     const json = customOHH.toJSON();
-    expect(json.spec_version).toBe("2.0.0");
-    expect(json.game_type).toBe("PLO");
-    expect(json.table_size).toBe(6);
-    expect(json.currency).toBe("USD");
+    expect(json.ohh.spec_version).toBe("2.0.0");
+    expect(json.ohh.game_type).toBe("PLO");
+    expect(json.ohh.table_size).toBe(6);
+    expect(json.ohh.currency).toBe("USD");
   });
 
   test("adds player correctly", () => {
@@ -43,8 +43,8 @@ describe("OpenHandHistory", () => {
     };
     ohh.addPlayer(player);
     const json = ohh.toJSON();
-    expect(json.players).toHaveLength(1);
-    expect(json.players[0]).toEqual(player);
+    expect(json.ohh.players).toHaveLength(1);
+    expect(json.ohh.players[0]).toEqual(player);
   });
 
   test("adds multiple players correctly", () => {
@@ -55,8 +55,8 @@ describe("OpenHandHistory", () => {
 
     players.forEach((player) => ohh.addPlayer(player));
     const json = ohh.toJSON();
-    expect(json.players).toHaveLength(2);
-    expect(json.players).toEqual(players);
+    expect(json.ohh.players).toHaveLength(2);
+    expect(json.ohh.players).toEqual(players);
   });
 
   test("adds round correctly", () => {
@@ -69,8 +69,8 @@ describe("OpenHandHistory", () => {
 
     ohh.addRound(round);
     const json = ohh.toJSON();
-    expect(json.rounds).toHaveLength(1);
-    expect(json.rounds[0]).toEqual(round);
+    expect(json.ohh.rounds).toHaveLength(1);
+    expect(json.ohh.rounds[0]).toEqual(round);
   });
 
   test("adds action to round correctly", () => {
@@ -91,8 +91,8 @@ describe("OpenHandHistory", () => {
     ohh.addActionToRound(1, action);
 
     const json = ohh.toJSON();
-    expect(json.rounds[0].actions).toHaveLength(1);
-    expect(json.rounds[0].actions[0]).toEqual(action);
+    expect(json.ohh.rounds[0].actions).toHaveLength(1);
+    expect(json.ohh.rounds[0].actions[0]).toEqual(action);
   });
 
   test("adds pot correctly", () => {
@@ -104,8 +104,8 @@ describe("OpenHandHistory", () => {
 
     ohh.addPot(pot);
     const json = ohh.toJSON();
-    expect(json.pots).toHaveLength(1);
-    expect(json.pots[0]).toEqual(pot);
+    expect(json.ohh.pots).toHaveLength(1);
+    expect(json.ohh.pots[0]).toEqual(pot);
   });
 
   test("handles complex hand history correctly", () => {
@@ -140,10 +140,10 @@ describe("OpenHandHistory", () => {
     });
 
     const json = ohh.toJSON();
-    expect(json.players).toHaveLength(2);
-    expect(json.rounds).toHaveLength(1);
-    expect(json.rounds[0].actions).toHaveLength(2);
-    expect(json.pots).toHaveLength(1);
+    expect(json.ohh.players).toHaveLength(2);
+    expect(json.ohh.rounds).toHaveLength(1);
+    expect(json.ohh.rounds[0].actions).toHaveLength(2);
+    expect(json.ohh.pots).toHaveLength(1);
   });
 
   describe("winning calculations", () => {
@@ -198,7 +198,7 @@ describe("OpenHandHistory", () => {
       });
 
       const json = ohh.toJSON();
-      expect(json.pots[0].player_wins[0].win_amount).toBe(30); // 50 (pot) - 20 (raise)
+      expect(json.ohh.pots[0].player_wins[0].win_amount).toBe(30); // 50 (pot) - 20 (raise)
     });
   });
 });
