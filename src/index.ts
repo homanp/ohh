@@ -80,24 +80,23 @@ export class OpenHandHistory {
   calculateWinningAmount(playerId: number, potAmount: number): number {
     let totalContribution = 0;
 
-    // Calculate total contribution
+    // Calculate the total contribution of the player
     for (const round of this.ohh.rounds) {
       for (const action of round.actions) {
         if (
           action.player_id === playerId &&
-          (action.action === "Bet" ||
-            action.action === "Raise" ||
-            action.action === "Call" ||
-            action.action === "Post SB" ||
-            action.action === "Post BB")
+          ["Bet", "Raise", "Call", "Post SB", "Post BB"].includes(action.action)
         ) {
-          totalContribution += action.amount || 0;
+          totalContribution += action.amount || 0; // Add the action amount if present
         }
       }
     }
 
-    // Return the difference between pot amount and contribution
-    return potAmount - totalContribution;
+    // Calculate and return the net winning amount
+    const netWinningAmount = potAmount - totalContribution;
+
+    // Ensure the result is not negative (players can't win less than 0)
+    return Math.max(netWinningAmount, 0);
   }
 }
 
