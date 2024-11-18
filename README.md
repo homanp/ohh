@@ -32,7 +32,7 @@ const ohh = new OpenHandHistory({
 ohh.addPlayer({
   name: 'Player 1',
   id: 1,
-  startingStack: 1000,
+  starting_stack: 1000,
   seat: 1
 });
 
@@ -45,8 +45,8 @@ ohh.addRound({
 
 // Add action to round
 ohh.addActionToRound(1, {
-  actionNumber: 1,
-  playerId: 1,
+  action_number: 1,
+  player_id: 1,
   action: 'RAISE',
   amount: 100
 });
@@ -60,6 +60,9 @@ ohh.addPot({
   amount: 50,
   player_wins: [{ player_id: 1, win_amount: win_amount }],
 });
+
+// Get JSON representation
+ohh.getJSON()
 
 // Save to file
 ohh.saveToFile('hand_history.json');
