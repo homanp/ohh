@@ -68,8 +68,8 @@ export class OpenHandHistory {
     this.ohh.pots.push(pot);
   }
 
-  toJSON(): OHHData {
-    return this.ohh;
+  toJSON(): { ohh: OHHData } {
+    return { ohh: this.ohh };
   }
 
   saveToFile(filename: string): void {
