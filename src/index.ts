@@ -92,11 +92,21 @@ export class OpenHandHistory {
       }
     }
 
-    // Calculate and return the net winning amount
-    const netWinningAmount = potAmount - totalContribution;
+    // Get the player's starting stack
+    const player = this.ohh.players.find((p) => p.id === playerId);
+    if (!player) {
+      throw new Error(`Player with ID ${playerId} not found`);
+    }
 
-    // Ensure the result is not negative (players can't win less than 0)
-    return Math.max(netWinningAmount, 0);
+    const startingStack = player.starting_stack;
+
+    // Calculate the final stack after winning the pot
+    const finalStack = startingStack - totalContribution + potAmount;
+
+    // Calculate the PokerTracker Win Amount (net change in stack)
+    const winAmount = finalStack - startingStack;
+
+    return winAmount;
   }
 }
 
