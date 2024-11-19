@@ -81,8 +81,9 @@ export class OpenHandHistory {
     let totalCommitted = 0;
     let playerContribution = 0;
     let highestOtherBet = 0;
+    let otherPlayersContribution = 0;
 
-    // Calculate total committed and track highest bet from others
+    // Calculate total committed and track contributions
     for (const round of this.ohh.rounds) {
       for (const action of round.actions) {
         if (
@@ -93,16 +94,20 @@ export class OpenHandHistory {
           if (action.player_id === playerId) {
             playerContribution += amount;
           } else {
+            otherPlayersContribution += amount;
             highestOtherBet = Math.max(highestOtherBet, amount);
           }
         }
       }
     }
 
-    // Calculate the matched portion of the player's bet
-    const matchedPlayerBet = Math.min(playerContribution, highestOtherBet);
+    // If the player's bet is fully called, return the entire pot
+    if (otherPlayersContribution >= playerContribution) {
+      return totalCommitted;
+    }
 
-    // Calculate the total winning amount
+    // Otherwise, calculate the winning amount as before
+    const matchedPlayerBet = Math.min(playerContribution, highestOtherBet);
     const winningAmount =
       totalCommitted - playerContribution + matchedPlayerBet;
 
