@@ -77,36 +77,36 @@ export class OpenHandHistory {
     writeFileSync(filename, stringRepresentation);
   }
 
-  calculateWinningAmount(playerId: number, potAmount: number): number {
-    let totalContribution = 0;
+  calculateWinningAmount(playerId: number): number {
+    let totalCommitted = 0;
+    let playerContribution = 0;
+    let highestOtherBet = 0;
 
-    // Calculate the total contribution of the player
+    // Calculate total committed and track highest bet from others
     for (const round of this.ohh.rounds) {
       for (const action of round.actions) {
         if (
-          action.player_id === playerId &&
           ["Bet", "Raise", "Call", "Post SB", "Post BB"].includes(action.action)
         ) {
-          totalContribution += action.amount || 0; // Add the action amount if present
+          const amount = action.amount || 0;
+          totalCommitted += amount;
+          if (action.player_id === playerId) {
+            playerContribution += amount;
+          } else {
+            highestOtherBet = Math.max(highestOtherBet, amount);
+          }
         }
       }
     }
 
-    // Get the player's starting stack
-    const player = this.ohh.players.find((p) => p.id === playerId);
-    if (!player) {
-      throw new Error(`Player with ID ${playerId} not found`);
-    }
+    // Calculate the matched portion of the player's bet
+    const matchedPlayerBet = Math.min(playerContribution, highestOtherBet);
 
-    const startingStack = player.starting_stack;
+    // Calculate the total winning amount
+    const winningAmount =
+      totalCommitted - playerContribution + matchedPlayerBet;
 
-    // Calculate the final stack after winning the pot
-    const finalStack = startingStack - totalContribution + potAmount;
-
-    // Calculate the PokerTracker Win Amount (net change in stack)
-    const winAmount = finalStack - startingStack;
-
-    return winAmount;
+    return winningAmount;
   }
 }
 

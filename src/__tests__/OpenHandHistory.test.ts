@@ -165,40 +165,39 @@ describe("OpenHandHistory", () => {
         action_number: 1,
         player_id: 2,
         action: "Post SB" as const,
-        amount: 5,
+        amount: 1,
       });
       ohh.addActionToRound(1, {
         action_number: 2,
         player_id: 3,
         action: "Post BB" as const,
-        amount: 10,
+        amount: 2,
       });
       ohh.addActionToRound(1, {
         action_number: 3,
         player_id: 1,
         action: "Raise" as const,
-        amount: 20,
+        amount: 6,
       });
       ohh.addActionToRound(1, {
         action_number: 4,
         player_id: 2,
-        action: "Call" as const,
-        amount: 15,
+        action: "Fold" as const,
       });
       ohh.addActionToRound(1, {
         action_number: 5,
         player_id: 3,
         action: "Fold" as const,
       });
-      const win_amount = ohh.calculateWinningAmount(1, 50);
+      const win_amount = ohh.calculateWinningAmount(1);
       ohh.addPot({
         number: 1,
-        amount: 50,
+        amount: 9,
         player_wins: [{ player_id: 1, win_amount }],
       });
 
       const json = ohh.toJSON();
-      expect(json.ohh.pots[0].player_wins[0].win_amount).toBe(30); // 50 (pot) - 20 (raise)
+      expect(json.ohh.pots[0].player_wins[0].win_amount).toBe(5); // 50 (pot) - 20 (raise)
     });
   });
 });
