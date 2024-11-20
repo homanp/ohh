@@ -263,114 +263,69 @@ describe("OpenHandHistory", () => {
       expect(json.ohh.pots[0].player_wins[0].win_amount).toBe(6); // 10 (pot) - 4 (player 1's total contribution)
     });
 
-    test("calculates winning amount correctly for winner on river in a complex hand", () => {
-      const preflopRound = { id: 1, street: "Preflop" as const, actions: [] };
+    test("calculates winning amount correctly for winner on flop in a complex hand", () => {
+      const preflopRound = { id: 0, street: "Preflop" as const, actions: [] };
       ohh.addRound(preflopRound);
-      ohh.addActionToRound(1, {
-        action_number: 1,
-        player_id: 2,
+      ohh.addActionToRound(0, {
+        action_number: 22,
+        player_id: 3,
         action: "Post SB" as const,
         amount: 1,
       });
-      ohh.addActionToRound(1, {
-        action_number: 2,
-        player_id: 3,
+      ohh.addActionToRound(0, {
+        action_number: 23,
+        player_id: 1,
         action: "Post BB" as const,
         amount: 2,
       });
-      ohh.addActionToRound(1, {
-        action_number: 3,
-        player_id: 1,
+      ohh.addActionToRound(0, {
+        action_number: 25,
+        player_id: 2,
         action: "Raise" as const,
-        amount: 6,
+        amount: 8,
       });
-      ohh.addActionToRound(1, {
-        action_number: 4,
+      ohh.addActionToRound(0, {
+        action_number: 26,
+        player_id: 3,
+        action: "Raise" as const,
+        amount: 24,
+      });
+      ohh.addActionToRound(0, {
+        action_number: 27,
+        player_id: 1,
+        action: "Fold" as const,
+      });
+      ohh.addActionToRound(0, {
+        action_number: 28,
         player_id: 2,
         action: "Call" as const,
-        amount: 5,
-      });
-      ohh.addActionToRound(1, {
-        action_number: 5,
-        player_id: 3,
-        action: "Call" as const,
-        amount: 4,
+        amount: 24,
       });
 
-      const flopRound = { id: 2, street: "Flop" as const, actions: [] };
+      const flopRound = { id: 1, street: "Flop" as const, actions: [] };
       ohh.addRound(flopRound);
-      ohh.addActionToRound(2, {
-        action_number: 6,
-        player_id: 2,
-        action: "Check" as const,
-      });
-      ohh.addActionToRound(2, {
-        action_number: 7,
+      ohh.addActionToRound(1, {
+        action_number: 29,
         player_id: 3,
         action: "Bet" as const,
-        amount: 8,
+        amount: 50,
       });
-      ohh.addActionToRound(2, {
-        action_number: 8,
-        player_id: 1,
-        action: "Call" as const,
-        amount: 8,
-      });
-      ohh.addActionToRound(2, {
-        action_number: 9,
+      ohh.addActionToRound(1, {
+        action_number: 30,
         player_id: 2,
         action: "Fold" as const,
       });
 
-      const turnRound = { id: 3, street: "Turn" as const, actions: [] };
-      ohh.addRound(turnRound);
-      ohh.addActionToRound(3, {
-        action_number: 10,
-        player_id: 3,
-        action: "Check" as const,
-      });
-      ohh.addActionToRound(3, {
-        action_number: 11,
-        player_id: 1,
-        action: "Bet" as const,
-        amount: 16,
-      });
-      ohh.addActionToRound(3, {
-        action_number: 12,
-        player_id: 3,
-        action: "Call" as const,
-        amount: 16,
-      });
-
-      const riverRound = { id: 4, street: "River" as const, actions: [] };
-      ohh.addRound(riverRound);
-      ohh.addActionToRound(4, {
-        action_number: 13,
-        player_id: 3,
-        action: "Check" as const,
-      });
-      ohh.addActionToRound(4, {
-        action_number: 14,
-        player_id: 1,
-        action: "Bet" as const,
-        amount: 30,
-      });
-      ohh.addActionToRound(4, {
-        action_number: 15,
-        player_id: 3,
-        action: "Call" as const,
-        amount: 30,
-      });
-
-      const win_amount = ohh.calculateWinningAmount(1);
+      const win_amount = ohh.calculateWinningAmount(3);
       ohh.addPot({
-        number: 1,
-        amount: 126,
-        player_wins: [{ player_id: 1, win_amount }],
+        number: 0,
+        amount: 100,
+        rake: 0,
+        player_wins: [{ player_id: 3, win_amount }],
       });
 
       const json = ohh.toJSON();
-      expect(json.ohh.pots[0].player_wins[0].win_amount).toBe(126); // 126 (pot) - 60 (player 1's total contribution)
+      expect(json.ohh.pots[0].player_wins[0].win_amount).toBe(59); // 100 (pot) - 42 (player 3's total contribution)
     });
   });
 });

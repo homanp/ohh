@@ -82,13 +82,11 @@ export class OpenHandHistory {
     let playerContribution = 0;
     let highestOtherBet = 0;
     let otherPlayersContribution = 0;
+    let currentBetSize = 0;
 
-    // Calculate total committed and track contributions
     for (const round of this.ohh.rounds) {
       for (const action of round.actions) {
-        if (
-          ["Bet", "Raise", "Call", "Post SB", "Post BB"].includes(action.action)
-        ) {
+        if (["Post SB", "Post BB"].includes(action.action)) {
           const amount = action.amount || 0;
           totalCommitted += amount;
           if (action.player_id === playerId) {
@@ -97,21 +95,39 @@ export class OpenHandHistory {
             otherPlayersContribution += amount;
             highestOtherBet = Math.max(highestOtherBet, amount);
           }
+          currentBetSize =
+            action.action === "Post BB" ? amount : currentBetSize;
+        } else if (["Bet", "Raise"].includes(action.action)) {
+          const amount = action.amount || 0;
+          const additionalAmount = amount - currentBetSize;
+          totalCommitted += additionalAmount;
+          if (action.player_id === playerId) {
+            playerContribution += additionalAmount;
+          } else {
+            otherPlayersContribution += additionalAmount;
+            highestOtherBet = Math.max(highestOtherBet, amount);
+          }
+          currentBetSize = amount;
+        } else if (action.action === "Call") {
+          const amount = action.amount || 0;
+          totalCommitted += amount;
+          if (action.player_id === playerId) {
+            playerContribution += amount;
+          } else {
+            otherPlayersContribution += amount;
+            highestOtherBet = Math.max(highestOtherBet, currentBetSize);
+          }
         }
       }
+      currentBetSize = 0; // Reset bet size for new street
     }
 
-    // If the player's bet is fully called, return the entire pot
     if (otherPlayersContribution >= playerContribution) {
       return totalCommitted;
     }
 
-    // Otherwise, calculate the winning amount as before
     const matchedPlayerBet = Math.min(playerContribution, highestOtherBet);
-    const winningAmount =
-      totalCommitted - playerContribution + matchedPlayerBet;
-
-    return winningAmount;
+    return totalCommitted - playerContribution + matchedPlayerBet;
   }
 }
 
